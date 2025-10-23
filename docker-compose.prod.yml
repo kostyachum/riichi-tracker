@@ -1,6 +1,6 @@
 services:
   web:
-    build: .
+    image: ${APP_IMAGE:-riichi-tracker:latest}
     command: >-
       bash -lc "python manage.py migrate &&
       python manage.py collectstatic --noinput &&

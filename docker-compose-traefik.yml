@@ -1,3 +1,4 @@
+# Reference for what is on prod, not part of the pipeline!
 services:
   traefik:
     image: traefik:v3.3
@@ -25,12 +26,11 @@ services:
       - "./letsencrypt:/letsencrypt"
     labels:
       # Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`traefik.thecreditsroll.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.?.com`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls.certresolver=le"
       - "traefik.http.routers.traefik.entrypoints=websecure"
-#      - "traefik.http.middlewares.admin.basicauth.users=jean:$$apr1$$c0anUi6e$$3AdNhHJqQG.Fmc6w228kU0,mcr:$$2y$$05$$r6cQ.FyO/kARA5fv3MxYxeFjHp0N9dg/Jzv0PuHqMiaU4GEzTrp3e"
-      - "traefik.http.middlewares.admin.basicauth.users=kostya:$$2y$$05$$FVZc4uqiN.zIoNNzEwL2wO1heSo6RySJh61upvByDhltGbaXBGvq."
+      - "traefik.http.middlewares.admin.basicauth.users=kostya:???"
       - "traefik.http.middlewares.ip.ipwhitelist.sourcerange=127.0.0.1/32, 82.239.249.174"
 #      - "traefik.http.routers.traefik.middlewares=admin,ip"
       - "traefik.http.routers.traefik.middlewares=admin"

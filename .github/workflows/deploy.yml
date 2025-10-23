@@ -15,20 +15,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REMOTE_DIR: ${{ vars.REMOTE_DIR }}
+      APP_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create deployment archive
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
         run: |
-          tar \
-            --exclude-vcs \
-            --exclude='.github' \
-            --exclude='.idea' \
-            --exclude='.env' \
-            --exclude='db/*.sqlite3' \
-            -czf app.tar.gz .
+          docker build \
+            -t "$APP_NAME:${APP_TAG}" \
+            -t "$APP_NAME:latest" \
+            .
+
+      - name: Save image as tarball
+        run: |
+          docker save "$APP_NAME:${APP_TAG}" | gzip > image.tar.gz
 
       - name: Load SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -49,8 +54,32 @@ jobs:
           SSH_USER: ${{ secrets.DROPLET_USER }}
           SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            'set -euo pipefail; REMOTE_DIR='"$REMOTE_DIR"'; mkdir -p "$REMOTE_DIR/db"'
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s -- "$REMOTE_DIR" <<'EOF'
+          set -euo pipefail
+          REMOTE_DIR="$1"
+          mkdir -p "$REMOTE_DIR/db"
+          EOF
+
+      - name: Upload image to droplet
+        env:
+          SSH_HOST: ${{ secrets.DROPLET_HOST }}
+          SSH_USER: ${{ secrets.DROPLET_USER }}
+          SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
+        run: |
+          scp -P "$SSH_PORT" image.tar.gz "$SSH_USER@$SSH_HOST:$REMOTE_DIR/image.tar.gz"
+
+      - name: Load image on droplet
+        env:
+          SSH_HOST: ${{ secrets.DROPLET_HOST }}
+          SSH_USER: ${{ secrets.DROPLET_USER }}
+          SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s -- "$REMOTE_DIR" <<'EOF'
+          set -euo pipefail
+          REMOTE_DIR="$1"
+          docker load -i "$REMOTE_DIR/image.tar.gz"
+          rm -f "$REMOTE_DIR/image.tar.gz"
+          EOF
 
       - name: Upload .env to droplet
         env:
@@ -70,26 +99,13 @@ jobs:
           scp -P "$SSH_PORT" "$tmpfile" "$SSH_USER@$SSH_HOST:$REMOTE_DIR/.env"
           rm -f "$tmpfile"
 
-      - name: Upload app to droplet
+      - name: Upload compose file to droplet
         env:
           SSH_HOST: ${{ secrets.DROPLET_HOST }}
           SSH_USER: ${{ secrets.DROPLET_USER }}
           SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
         run: |
-          scp -P "$SSH_PORT" app.tar.gz "$SSH_USER@$SSH_HOST:$REMOTE_DIR/app.tar.gz"
-
-      - name: Unpack on droplet
-        env:
-          SSH_HOST: ${{ secrets.DROPLET_HOST }}
-          SSH_USER: ${{ secrets.DROPLET_USER }}
-          SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
-        run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            'set -euo pipefail; \
-             REMOTE_DIR='"$REMOTE_DIR"'; \
-             mkdir -p "$REMOTE_DIR"; \
-             tar -xzf "$REMOTE_DIR/app.tar.gz" -C "$REMOTE_DIR"; \
-             rm -f "$REMOTE_DIR/app.tar.gz"'
+          scp -P "$SSH_PORT" docker-compose.prod.yml "$SSH_USER@$SSH_HOST:$REMOTE_DIR/docker-compose.prod.yml"
       
       - name: Ensure network and deploy (Compose)
         env:
@@ -97,9 +113,11 @@ jobs:
           SSH_USER: ${{ secrets.DROPLET_USER }}
           SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            'set -euo pipefail; \
-             REMOTE_DIR='"$REMOTE_DIR"'; \
-             cd "$REMOTE_DIR"; \
-             docker network create gateway >/dev/null 2>&1 || true; \
-             docker compose -f docker-compose.prod.yml --project-name riichi-tracker up -d --build'
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s -- "$REMOTE_DIR" "$APP_NAME:$APP_TAG" <<'EOF'
+          set -euo pipefail
+          REMOTE_DIR="$1"
+          APP_IMAGE_ARG="$2"
+          cd "$REMOTE_DIR"
+          docker network create gateway >/dev/null 2>&1 || true
+          APP_IMAGE="$APP_IMAGE_ARG" docker compose -f docker-compose.prod.yml --project-name riichi-tracker up -d
+          EOF
