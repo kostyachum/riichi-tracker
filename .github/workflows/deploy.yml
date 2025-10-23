@@ -121,5 +121,6 @@ jobs:
           APP_IMAGE_ARG="$2"
           cd "$REMOTE_DIR"
           docker network create gateway >/dev/null 2>&1 || true
+          docker compose -f docker-compose.prod.yml down
           APP_IMAGE="$APP_IMAGE_ARG" docker compose -f docker-compose.prod.yml --project-name riichi-tracker up -d
           EOF
