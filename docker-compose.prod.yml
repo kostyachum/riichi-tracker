@@ -11,8 +11,8 @@ services:
       DJANGO_ALLOWED_HOSTS: ${APP_HOST}
       DJANGO_CSRF_TRUSTED_ORIGINS: https://${APP_HOST}
     volumes:
-      - db_data:/app/db
-      - staticfiles:/app/staticfiles
+      - ./db_data:/app/db
+      - ./staticfiles:/app/staticfiles
     expose:
       - "8000"
     labels:
