@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.exposedByDefault=false
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+      - --core.defaultRuleSyntax=v2
+      - --api
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.http.tls.certResolver=le
+      - --certificatesresolvers.le.acme.email=kostyachum@gmail.com
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    labels:
+      # Dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik.thecreditsroll.com`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=le"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+#      - "traefik.http.middlewares.admin.basicauth.users=jean:$$apr1$$c0anUi6e$$3AdNhHJqQG.Fmc6w228kU0,mcr:$$2y$$05$$r6cQ.FyO/kARA5fv3MxYxeFjHp0N9dg/Jzv0PuHqMiaU4GEzTrp3e"
+      - "traefik.http.middlewares.admin.basicauth.users=kostya:$$2y$$05$$FVZc4uqiN.zIoNNzEwL2wO1heSo6RySJh61upvByDhltGbaXBGvq."
+      - "traefik.http.middlewares.ip.ipwhitelist.sourcerange=127.0.0.1/32, 82.239.249.174"
+#      - "traefik.http.routers.traefik.middlewares=admin,ip"
+      - "traefik.http.routers.traefik.middlewares=admin"
+      - "traefik.enable=true"
+    networks:
+      # Attach the traefik container to the default network (which is the global "gateway" network)
+      - default
+    restart: unless-stopped
+
+networks:
+  default:
+    external: true
+    name: gateway
