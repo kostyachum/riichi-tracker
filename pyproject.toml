@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "riichi-tracker"
+version = "0.1.0"
+description = "Riichi Mahjong games tracker"
+authors = []
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1"
+gunicorn = "^22.0.0"
+ipython = "^9.6.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.9"
+black = "^24.10.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

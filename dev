@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Simple pass-through to run commands inside the docker compose `web` service.
+# If the service isn't running, it uses `docker compose run --rm`.
+# Examples:
+#   ./dev poetry add django-debug-toolbar
+#   ./dev python manage.py migrate
+#   ./dev bash
+
+SERVICE=${SERVICE:-web}
+DC=${DC:-docker compose}
+
+usage() {
+  echo "Usage: $0 <command> [args...]" >&2
+  echo "Examples: $0 poetry add <pkg> | $0 python manage.py migrate" >&2
+  exit 1
+}
+
+is_service_running() {
+  ${DC} ps -q "${SERVICE}" | grep -q . 2>/dev/null || return 1
+}
+
+exec_in_container() {
+  local opts=()
+  if ! [ -t 1 ]; then
+    opts+=( -T )
+  fi
+  if is_service_running; then
+    exec ${DC} exec "${opts[@]}" "${SERVICE}" "$@"
+  else
+    exec ${DC} run --rm "${opts[@]}" "${SERVICE}" "$@"
+  fi
+}
+
+[[ $# -gt 0 ]] || usage
+exec_in_container "$@"
