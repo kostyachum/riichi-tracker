@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    command: >-
+      bash -lc "python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60"
+    env_file: .env
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: ${APP_HOST}
+      DJANGO_CSRF_TRUSTED_ORIGINS: https://${APP_HOST}
+    volumes:
+      - db_data:/app/db
+      - staticfiles:/app/staticfiles
+    expose:
+      - "8000"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.app.rule=Host(`${APP_HOST}`)
+      - traefik.http.routers.app.entrypoints=websecure
+      - traefik.http.routers.app.tls.certresolver=le
+      - traefik.http.services.app.loadbalancer.server.port=8000
+    networks:
+      - default
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+networks:
+  default:
+    external: true
+    name: gateway
