@@ -15,6 +15,8 @@ services:
       - ./staticfiles:/app/staticfiles
     expose:
       - "8000"
+    ports:
+      - "8000:8000"
     labels:
       - traefik.enable=true
       - traefik.http.routers.app.rule=Host(`${APP_HOST}`)
@@ -26,6 +28,12 @@ services:
       - default
       - gateway
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 networks:
   gateway:

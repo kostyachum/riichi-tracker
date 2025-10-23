@@ -1,8 +1,6 @@
 name: Build and Deploy to Droplet
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 permissions:
