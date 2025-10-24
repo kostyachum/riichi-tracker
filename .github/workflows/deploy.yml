@@ -113,7 +113,7 @@ jobs:
           SSH_USER: ${{ secrets.DROPLET_USER }}
           SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
         run: |
-          scp -P "$SSH_PORT" config/nginx.conf "$SSH_USER@$SSH_HOST:$REMOTE_DIR/config/nginx.conf"
+          scp -P "$SSH_PORT" config/nginx.conf "$SSH_USER@$SSH_HOST:$REMOTE_DIR/config/"
       
       - name: Ensure network and deploy (Compose)
         env:
