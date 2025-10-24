@@ -8,6 +8,7 @@ from django.dispatch import receiver
 class Avatar(models.Model):
     file = models.FileField(upload_to="avatars/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    allow_randomize = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         # Show the filename for easy identification in admin
@@ -29,7 +30,7 @@ class Player(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.avatar:
-            avatars = list(Avatar.objects.all())
+            avatars = list(Avatar.objects.filter(allow_randomize=True))
             if avatars:
                 self.avatar = random.choice(avatars)
         super().save(*args, **kwargs)
