@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from pathlib import Path
 from django.db.models.signals import post_save
@@ -7,6 +8,7 @@ from django.dispatch import receiver
 class Avatar(models.Model):
     file = models.FileField(upload_to="avatars/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    allow_randomize = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         # Show the filename for easy identification in admin
@@ -22,8 +24,16 @@ class Player(models.Model):
         blank=True,
         related_name="players",
     )
+
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.avatar:
+            avatars = list(Avatar.objects.filter(allow_randomize=True))
+            if avatars:
+                self.avatar = random.choice(avatars)
+        super().save(*args, **kwargs)
 
 
 class Game(models.Model):
