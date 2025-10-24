@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Player, Game, GameResult
+from .forms import GameResultInlineFormSet
 
 
 @admin.register(Player)
@@ -11,6 +12,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
 class GameResultInline(admin.TabularInline):
     model = GameResult
+    formset = GameResultInlineFormSet
     extra = 4
     min_num = 0
     max_num = 4

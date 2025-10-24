@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 # Simple pass-through to run commands inside the docker compose `web` service.
 # If the service isn't running, it uses `docker compose run --rm`.

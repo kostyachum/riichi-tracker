@@ -1,0 +1,48 @@
+{% load humanize %}
+
+<div class="card bg-base-100 shadow-md mb-4">
+  <div class="card-body p-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-2">
+      <div class="flex gap-4 items-center">
+        <h4 class="card-title m-0 shrink-0">Game #{{ game.id }}</h4>
+        <span class="text-sm opacity-70">{{ game.played_at|date:"d F Y" }} at {{ game.played_at|date:"H:i" }}</span>
+        <span class="text-sm opacity-80"></span>
+        <span class="text-sm text-base-content/60 hidden md:inline">
+          Rules: {{ games.first.rule_label }}
+        </span>
+      </div>
+      <a href="/admin/games/game/{{ game.id }}/change/"
+         class="btn btn-sm rounded-md bg-slate-200 px-3 py-1.5 text-sm font-medium text-slate-900 shadow hover:bg-slate-300">Edit</a>
+    </div>
+
+    <!-- Inline player scores -->
+    <div class="flex flex-wrap flex-col gap-y-2 text-lg md:flex-row md:items-center md:justify-between">
+      {% for result in game.gameresult_set.all %}
+        <div class="flex items-baseline flex-col gap-1 ">
+          <div class="flex items-center gap-2">
+            {% if result.player.id == target_player_id %}
+              <div class="text-base-content font-bold bg-green-200 px-2">
+                {{ result.player.name }}
+              </div>
+            {% else %}
+              <a href="/player/{{ result.player.id }}/" class="text-base-content font-medium hover:underline">
+                {{ result.player.name }}
+              </a>
+            {% endif %}
+
+            <span class="text-sm">
+          {{ result.score_adjusted|stringformat:'+.1f' }}
+          </span>
+          </div>
+
+          <span
+              class="{% if result.score_raw >= 55000 %}text-orange-600 font-bold {% elif result.score_raw <= 5000 %} text-rose-600 font-bold {% else %} text-amber-600 font-medium {% endif %}">
+            {{ result.score_raw|intcomma }}
+          </span>
+
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

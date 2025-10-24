@@ -41,8 +41,13 @@ class Game(models.Model):
             res.score_adjusted = diff_from_target + uma
             res.save(update_fields=["rank", "score_adjusted"])
 
+    def rule_label(self):
+        second_display = f'+{self.uma_second}' if self.uma_second > 0 else self.uma_second
+        return f"{self.target_score / 1000:.0f}k return · {self.start_score / 1000:.0f}k start · Uma +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
+
 
 class GameResult(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     score_raw = models.IntegerField()              # e.g. 47000
