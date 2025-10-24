@@ -31,13 +31,13 @@ services:
       - ./media:/app/media:ro
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "8000:80"
+      - "8010:80"
     labels:
       - traefik.enable=true
       - traefik.http.routers.app.rule=Host(`${APP_HOST}`)
       - traefik.http.routers.app.entrypoints=websecure
       - traefik.http.routers.app.tls.certresolver=le
-      - traefik.http.services.app.loadbalancer.server.port=8000
+      - traefik.http.services.app.loadbalancer.server.port=8010
       - traefik.docker.network=gateway
     networks:
       - default
