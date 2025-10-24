@@ -89,7 +89,8 @@ USE_TZ = True
 # Use absolute path for correct URL generation in production
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS: list[Path] = []
+# Include top-level "static" directory so assets like favicons are served
+STATICFILES_DIRS: list[Path] = [BASE_DIR / "static"]
 
 # WhiteNoise for efficient static file serving in production
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
