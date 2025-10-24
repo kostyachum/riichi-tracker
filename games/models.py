@@ -1,11 +1,27 @@
-# models.py
 from django.db import models
+from pathlib import Path
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class Avatar(models.Model):
+    file = models.FileField(upload_to="avatars/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        # Show the filename for easy identification in admin
+        return Path(self.file.name).name if self.file else "<no file>"
+
+
 class Player(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    avatar = models.ForeignKey(
+        "Avatar",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="players",
+    )
     def __str__(self):
         return self.name
 

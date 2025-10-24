@@ -1,13 +1,22 @@
 from django.contrib import admin
-from .models import Player, Game, GameResult
+from .models import Player, Game, GameResult, Avatar
 from .forms import GameResultInlineFormSet
 
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
+    list_display = ("name", "id", "avatar")
     search_fields = ("name",)
     ordering = ("name",)
+    autocomplete_fields = ()
+    raw_id_fields = ("avatar",)
+
+
+@admin.register(Avatar)
+class AvatarAdmin(admin.ModelAdmin):
+    list_display = ("id", "file", "uploaded_at")
+    search_fields = ("file",)
+    ordering = ("-uploaded_at",)
 
 
 class GameResultInline(admin.TabularInline):

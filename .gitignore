@@ -11,6 +11,7 @@ env/
 # Django
 db.sqlite3
 staticfiles/
+media/
 
 # Tooling
 .mypy_cache/

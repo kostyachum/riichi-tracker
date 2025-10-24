@@ -13,6 +13,7 @@ services:
     volumes:
       - ./db_data:/app/db
       - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
     expose:
       - "8000"
     ports:

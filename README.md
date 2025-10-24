@@ -28,6 +28,13 @@ Base scaffold for a Riichi Mahjong games tracker using Django, managed with Poet
 - Uses SQLite by default; DB stored at `db.sqlite3` in the repo root.
 - Docker image installs Poetry and only the main deps; dev tools remain for local use.
 
+### Uploads / Media
+
+- User uploads (avatars) are stored under `MEDIA_ROOT` (`/app/media`) and served at `MEDIA_URL` (`/media/`).
+- For small deployments running Gunicorn without a separate web server, the WSGI app is wrapped to serve `/media/` via WhiteNoise with no caching.
+- In production Compose (`docker-compose.prod.yml`), the `media` folder is volume-mounted: `./media:/app/media` so uploads persist across deploys.
+- For higher traffic or multiple instances, move media to object storage (e.g., S3 via `django-storages`) or serve `/media/` through a dedicated web server.
+
 ## Deployment
 
 This repo includes a GitHub Actions workflow to build a Docker image and deploy it to a DigitalOcean droplet over SSH.
