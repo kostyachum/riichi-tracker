@@ -1,8 +1,7 @@
 name: Build and Deploy to Droplet
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -12,6 +11,7 @@ env:
 
 jobs:
   build-and-deploy:
+    environment: deployment
     runs-on: ubuntu-latest
     env:
       REMOTE_DIR: ${{ vars.REMOTE_DIR }}
@@ -119,5 +119,36 @@ jobs:
           APP_IMAGE_ARG="$2"
           cd "$REMOTE_DIR"
           docker network create gateway >/dev/null 2>&1 || true
+          docker compose -f docker-compose.prod.yml down
           APP_IMAGE="$APP_IMAGE_ARG" docker compose -f docker-compose.prod.yml --project-name riichi-tracker up -d
+          EOF
+
+      - name: Retag latest and cleanup old images
+        env:
+          SSH_HOST: ${{ secrets.DROPLET_HOST }}
+          SSH_USER: ${{ secrets.DROPLET_USER }}
+          SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s -- "$REMOTE_DIR" "$APP_NAME" "$APP_TAG" <<'EOF'
+          set -euo pipefail
+          : "${1:?REMOTE_DIR required}"; : "${2:?APP_NAME required}"; : "${3:?APP_TAG required}"
+          REMOTE_DIR="$1"; APP_NAME="$2"; APP_TAG="$3"
+          CURRENT_REF="$APP_NAME:$APP_TAG"
+
+          # Point :latest to the deployed image
+          if docker image inspect "$CURRENT_REF" >/dev/null 2>&1; then
+            docker tag "$CURRENT_REF" "$APP_NAME:latest" || true
+          fi
+
+          # Remove all other tags for this repo, keep current and latest
+          mapfile -t TAGS < <(docker images "$APP_NAME" --format '{{.Repository}}:{{.Tag}}' | grep -E "^${APP_NAME}:" || true)
+          for tag in "${TAGS[@]}"; do
+            if [ "$tag" = "$CURRENT_REF" ] || [ "$tag" = "$APP_NAME:latest" ]; then
+              continue
+            fi
+            docker rmi "$tag" || true
+          done
+
+          # Clean up dangling layers
+          docker image prune -f || true
           EOF
