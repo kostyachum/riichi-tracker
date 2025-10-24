@@ -20,27 +20,33 @@
     <div class="flex flex-wrap flex-col gap-y-2 text-lg md:flex-row md:items-center md:justify-between">
       {% for result in game.gameresult_set.all %}
         <div class="flex items-baseline flex-col gap-1 ">
-          <div class="flex items-center gap-2">
-            {% if result.player.id == target_player_id %}
-              <div class="text-base-content font-bold bg-green-200 px-2">
-                {{ result.player.name }}
-              </div>
-            {% else %}
-              <a href="/player/{{ result.player.id }}/" class="text-base-content font-medium hover:underline">
-                {{ result.player.name }}
-              </a>
-            {% endif %}
+          <div class="flex gap-2 items-start">
+            <a href="/player/{{ result.player.id }}/">
+              <img src="{{ result.player.avatar.file.url }}" width="50" height="50"  class="border rounded-md"/>
+            </a>
+            <div class="flex flex-col">
+            <div class="flex gap-2 items-center">
+              {% if result.player.id == target_player_id %}
+                <div class="text-base-content font-bold bg-green-200 px-2">
+                  {{ result.player.name }}
+                </div>
+              {% else %}
+                <a href="/player/{{ result.player.id }}/" class="text-base-content font-medium hover:underline">
+                  {{ result.player.name }}
+                </a>
+              {% endif %}
 
-            <span class="text-sm">
-          {{ result.score_adjusted|stringformat:'+.1f' }}
-          </span>
+              <span class="text-sm">
+                {{ result.score_adjusted|stringformat:'+.1f' }}
+              </span>
+            </div>
+
+              <span
+                  class="{% if result.score_raw >= 55000 %}text-emerald-700 font-bold {% elif result.score_raw <= 5000 %} text-rose-600 font-bold {% else %} text-amber-600 font-medium {% endif %}">
+                {{ result.score_raw|intcomma }}
+              </span>
+            </div>
           </div>
-
-          <span
-              class="{% if result.score_raw >= 55000 %}text-emerald-700 font-bold {% elif result.score_raw <= 5000 %} text-rose-600 font-bold {% else %} text-amber-600 font-medium {% endif %}">
-            {{ result.score_raw|intcomma }}
-          </span>
-
         </div>
       {% endfor %}
     </div>

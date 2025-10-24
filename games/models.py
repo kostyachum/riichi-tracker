@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from pathlib import Path
 from django.db.models.signals import post_save
@@ -22,8 +23,16 @@ class Player(models.Model):
         blank=True,
         related_name="players",
     )
+
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.avatar:
+            avatars = list(Avatar.objects.all())
+            if avatars:
+                self.avatar = random.choice(avatars)
+        super().save(*args, **kwargs)
 
 
 class Game(models.Model):
