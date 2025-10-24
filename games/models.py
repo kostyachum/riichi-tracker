@@ -26,20 +26,25 @@ class Game(models.Model):
     def calculate_final_scores(self):
         """Compute and store each player's adjusted score (with oka + uma)."""
         results = list(self.gameresult_set.all())
-        if len(results) != 4 or any(r.rank for r in results):
+        if len(results) != 4:
             return
         results.sort(key=lambda r: r.score_raw, reverse=True)
 
         uma_values = [self.uma_top, self.uma_second,
                       self.uma_third, self.uma_last]
-
+        old_values = {res.id: {'rank': res.rank, 'score_adjusted': res.score_adjusted} for res in results}
+        new_values = {}
         for rank, (res, uma) in enumerate(zip(results, uma_values), start=1):
             diff_from_target = (res.score_raw - self.target_score) / 1000
             if rank == 1:
                 diff_from_target += self.oka_value / 1000
-            res.rank = rank
-            res.score_adjusted = diff_from_target + uma
-            res.save(update_fields=["rank", "score_adjusted"])
+            new_values[res.id] = {'rank': rank, 'score_adjusted': diff_from_target + uma}
+
+        for result_id, score_data in new_values.items():
+            old_score = old_values[result_id]
+            if any(old_score[k] != score_data[k] for k in score_data):
+                GameResult.objects.filter(id=result_id).update(**score_data)
+
 
     def rule_label(self):
         second_display = f'+{self.uma_second}' if self.uma_second > 0 else self.uma_second
