@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
   <header class="flex items-baseline justify-between mb-6">
-    <h1 class="text-2xl font-semibold tracking-tight">Riichi Mahjong Tracker</h1>
+    <h1 class="text-2xl font-semibold tracking-tight flex items-center gap-3">
+      <img src="{% static 'logo.png' %}" alt="Riichi Tracker logo" class="h-16 w-16"/>
+      <span>Riichi Mahjong Tracker</span>
+    </h1>
     <nav>
       <a href="/admin/" class="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-slate-800">Admin</a>
     </nav>
