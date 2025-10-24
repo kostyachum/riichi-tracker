@@ -71,3 +71,8 @@ class GameResultAdmin(admin.ModelAdmin):
     ordering = ("-game__played_at", "rank")
     autocomplete_fields = ("player",)
     raw_id_fields = ("game",)
+
+# Admin branding
+admin.site.site_header = "Riichi Tracker Admin"
+admin.site.site_title = "Riichi Tracker"
+admin.site.index_title = "Dashboard"
