@@ -57,7 +57,7 @@ jobs:
           ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s -- "$REMOTE_DIR" <<'EOF'
           set -euo pipefail
           REMOTE_DIR="$1"
-          mkdir -p "$REMOTE_DIR/db"
+          mkdir -p "$REMOTE_DIR/db" "$REMOTE_DIR/config" "$REMOTE_DIR/staticfiles" "$REMOTE_DIR/media"
           EOF
 
       - name: Upload image to droplet
@@ -106,6 +106,14 @@ jobs:
           SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
         run: |
           scp -P "$SSH_PORT" docker-compose.prod.yml "$SSH_USER@$SSH_HOST:$REMOTE_DIR/docker-compose.prod.yml"
+      
+      - name: Upload Nginx config to droplet
+        env:
+          SSH_HOST: ${{ secrets.DROPLET_HOST }}
+          SSH_USER: ${{ secrets.DROPLET_USER }}
+          SSH_PORT: ${{ secrets.DROPLET_PORT != '' && secrets.DROPLET_PORT || '22' }}
+        run: |
+          scp -P "$SSH_PORT" config/nginx.conf "$SSH_USER@$SSH_HOST:$REMOTE_DIR/config/nginx.conf"
       
       - name: Ensure network and deploy (Compose)
         env:
