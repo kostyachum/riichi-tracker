@@ -16,6 +16,8 @@ services:
       - ./media:/app/media
     expose:
       - "8000"
+    labels:
+      - traefik.enable=false
     networks:
       - default
     restart: unless-stopped
