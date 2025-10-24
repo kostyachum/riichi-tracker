@@ -1,20 +1,28 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import Player, Game, GameResult, Avatar
 from .forms import GameResultInlineFormSet
 
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ("name", "id", "avatar")
+    list_display = ("name", "id", "avatar_img")
     search_fields = ("name",)
     ordering = ("name",)
     autocomplete_fields = ()
     raw_id_fields = ("avatar",)
+    readonly_fields = ('avatar_img',)
+
+    def avatar_img(self, instance):
+        if instance.avatar:
+            return mark_safe(f'<img src="{instance.avatar.file.url}" width="100" />')
+        return '-'
 
 
 @admin.register(Avatar)
 class AvatarAdmin(admin.ModelAdmin):
-    list_display = ("id", "file", "uploaded_at")
+    list_display = ("file", "id", "uploaded_at")
     search_fields = ("file",)
     ordering = ("-uploaded_at",)
 
