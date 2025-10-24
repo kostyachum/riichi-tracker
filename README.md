@@ -31,8 +31,7 @@ Base scaffold for a Riichi Mahjong games tracker using Django, managed with Poet
 ### Uploads / Media
 
 - User uploads (avatars) are stored under `MEDIA_ROOT` (`/app/media`) and served at `MEDIA_URL` (`/media/`).
-- For small deployments running Gunicorn without a separate web server, the WSGI app is wrapped to serve `/media/` via WhiteNoise with no caching.
-- In production Compose (`docker-compose.prod.yml`), the `media` folder is volume-mounted: `./media:/app/media` so uploads persist across deploys.
+- In production, Nginx serves `/media/` directly from `/app/media` (see `docker-compose.prod.yml`). The `media` folder is volume-mounted: `./media:/app/media` so uploads persist across deploys.
 - For higher traffic or multiple instances, move media to object storage (e.g., S3 via `django-storages`) or serve `/media/` through a dedicated web server.
 
 ## Deployment
@@ -63,9 +62,27 @@ How it works:
 - It runs Django migrations in a one-off container, then restarts the app container.
 - SQLite is persisted by binding `~/apps/riichi-tracker/db/db.sqlite3` to `/app/db/db.sqlite3` inside the container.
 
-Ports and service:
+### Production stack (Nginx + Gunicorn)
 
-- The workflow maps host port `8000` to the app’s `8000`. Adjust in `.github/workflows/deploy.yml` to use `80` or behind a reverse proxy (e.g., Nginx/Caddy/Traefik).
+- `docker-compose.prod.yml` runs Django via Gunicorn (`web`) and fronts it with Nginx (`nginx`).
+- Nginx serves `/static/` from `/app/staticfiles` and `/media/` from `/app/media`, and proxies app routes to `web:8000`.
+- Volumes:
+  - `./staticfiles:/app/staticfiles` (collectstatic output)
+  - `./media:/app/media` (user uploads)
+
+Start or update prod:
+
+```
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Check:
+
+- App: http://localhost:8000/
+- Example static: http://localhost:8000/static/admin/css/base.css
+- Example media: http://localhost:8000/media/avatars/<uploaded-file>
+
+If you need TLS or a public hostname, put Nginx behind a reverse proxy or terminate TLS directly in Nginx.
 
 First-time droplet setup (example):
 

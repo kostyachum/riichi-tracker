@@ -30,7 +30,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -93,8 +92,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Include top-level "static" directory so assets like favicons are served
 STATICFILES_DIRS: list[Path] = [BASE_DIR / "static"]
 
-# WhiteNoise for efficient static file serving in production
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# In production, static files are served by Nginx
 
 
 # Default primary key field type
