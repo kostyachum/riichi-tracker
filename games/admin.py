@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Player, Game, GameResult, Avatar
+from .models import Player, Game, GameResult, Avatar, Club
 from .forms import GameResultInlineFormSet
 
 
@@ -13,6 +13,7 @@ class PlayerAdmin(admin.ModelAdmin):
     autocomplete_fields = ()
     raw_id_fields = ("avatar",)
     readonly_fields = ('avatar_img',)
+    filter_horizontal = ("clubs",)
 
     def avatar_img(self, instance):
         if instance.avatar:
@@ -71,6 +72,21 @@ class GameResultAdmin(admin.ModelAdmin):
     ordering = ("-game__played_at", "rank")
     autocomplete_fields = ("player",)
     raw_id_fields = ("game",)
+
+
+class PlayerInline(admin.TabularInline):
+    model = Player.clubs.through
+    extra = 1
+    autocomplete_fields = ["player"]
+
+
+@admin.register(Club)
+class ClubAdmin(admin.ModelAdmin):
+    list_display = ("slug", "name", 'location')
+    search_fields = ("name",)
+    ordering = ("name",)
+    inlines = [PlayerInline]
+
 
 # Admin branding
 admin.site.site_header = "Riichi Tracker Admin"

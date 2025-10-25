@@ -12,6 +12,13 @@
           {{ player.name }}
         </h1>
 
+        <div>Clubs: {% for club in player.clubs.all %}
+          {{ club.name }}{% if not forloop.last %}, {% endif %}
+          {% empty %}
+            Hasn’t joined a club
+          {% endfor %}
+        </div>
+
         <!-- Stats summary -->
         <div class="flex flex-wrap gap-2 mt-2">
           <div class="badge badge-outline text-sm">Games: {{ games|length }}</div>

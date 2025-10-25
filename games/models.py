@@ -3,6 +3,25 @@ from django.db import models
 from pathlib import Path
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.text import slugify
+
+
+class Club(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(db_index=True, max_length=100, unique=True, editable=True, blank=True)
+    location = models.CharField(max_length=300, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:100]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.name} ({self.slug})'
+
+    @property
+    def display_name(self):
+        return f'{self.name} ({self.location})' if self.location else self.name
 
 
 class Avatar(models.Model):
@@ -24,6 +43,7 @@ class Player(models.Model):
         blank=True,
         related_name="players",
     )
+    clubs = models.ManyToManyField(Club, related_name="players")
 
     def __str__(self):
         return self.name
@@ -40,11 +60,11 @@ class Game(models.Model):
     played_at = models.DateTimeField(auto_now_add=True)
     oka_value = models.IntegerField(default=20000)   # total oka bonus (points)
     start_score = models.IntegerField(default=25000)
-    target_score = models.IntegerField(default=30000)
-    uma_top = models.IntegerField(default=20)
-    uma_second = models.IntegerField(default=10)
-    uma_third = models.IntegerField(default=-10)
-    uma_last = models.IntegerField(default=-20)
+    target_score = models.IntegerField(default=25000)
+    uma_top = models.IntegerField(default=15)
+    uma_second = models.IntegerField(default=5)
+    uma_third = models.IntegerField(default=-5)
+    uma_last = models.IntegerField(default=-15)
 
     def __str__(self):
         return f"Game {self.id} on {self.played_at:%Y-%m-%d}"
@@ -74,7 +94,8 @@ class Game(models.Model):
 
     def rule_label(self):
         second_display = f'+{self.uma_second}' if self.uma_second > 0 else self.uma_second
-        return f"{self.target_score / 1000:.0f}k return · {self.start_score / 1000:.0f}k start · Uma +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
+        oka = '' if self.target_score == self.start_score else f'{self.target_score / 1000:.0f}k return · {self.start_score / 1000:.0f}k start · '
+        return f"{oka}Uma +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
 
 
 class GameResult(models.Model):
