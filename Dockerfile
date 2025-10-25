@@ -9,7 +9,7 @@ WORKDIR /app
 
 # System deps (build essentials for psycopg-binary not strictly needed, but handy for other libs)
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential curl \
+    && apt-get install -y --no-install-recommends build-essential curl gettext \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry

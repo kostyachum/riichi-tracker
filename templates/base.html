@@ -38,8 +38,29 @@
 </head>
 <body class="min-h-full bg-slate-50 text-slate-800">
 <div class="max-w-5xl mx-auto p-6">
-    {% block content %}
-    {% endblock %}
+{% load i18n %}
+
+  <nav class="flex items-start gap-2 w-full">
+  {% block header-control %}
+    <div class="ml-auto">
+      <form action="{% url 'set_language' %}" method="post" class="inline">
+        {% csrf_token %}
+        <select name="language" onchange="this.form.submit()" class="select select-sm select-neutral">
+          {% get_current_language as LANGUAGE_CODE %}
+          {% get_available_languages as LANGUAGES %}
+          {% for code, name in LANGUAGES %}
+            <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
+              {{ name }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+  {% endblock %}
+  </nav>
+
+  {% block content %}
+  {% endblock %}
 </div>
 
 {% block extra_scripts %}{% endblock %}

@@ -4,6 +4,7 @@ from pathlib import Path
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
 
 
 class Club(models.Model):
@@ -94,8 +95,12 @@ class Game(models.Model):
 
     def rule_label(self):
         second_display = f'+{self.uma_second}' if self.uma_second > 0 else self.uma_second
-        oka = '' if self.target_score == self.start_score else f'{self.target_score / 1000:.0f}k return · {self.start_score / 1000:.0f}k start · '
-        return f"{oka}Uma +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
+        oka = '' if self.target_score == self.start_score else _("%(target)sk return · %(start)sk start ·") % {
+            "target": int(self.target_score / 1000),
+            "start": int(self.start_score / 1000),
+        }
+        uma_word = _('Uma')
+        return f"{oka}{uma_word} +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
 
 
 class GameResult(models.Model):

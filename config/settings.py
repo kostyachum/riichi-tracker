@@ -81,11 +81,20 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 USE_L10N = True  # Enable localization of formats (dates, numbers, etc.)
+
+LANGUAGES = [
+    ("en", "🇬🇧 English"),
+    ("uk", "🇺🇦 Українська"),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",  # where translation files will be stored
+]
 
 # Static files
 # Use absolute path for correct URL generation in production

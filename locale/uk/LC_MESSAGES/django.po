@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-25 20:19+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: games/models.py:98
+#, python-format
+msgid "%(target)sk return · %(start)sk start ·"
+msgstr "%(target)sk результат · %(start)sk старт ·"
+
+#: games/models.py:102
+msgid "Uma"
+msgstr "Ума"
+
+#: templates/games/game_card.html:10
+msgid "Game"
+msgstr "Гра"
+
+#: templates/games/game_card.html:18
+msgid "Edit"
+msgstr "Змінити"
+
+#: templates/games/player_profile.html:6
+msgid "← Back to games"
+msgstr "← Назад до ігор"
+
+#: templates/games/player_profile.html:21
+msgid "Clubs:"
+msgstr "Клуби:"
+
+#: templates/games/player_profile.html:24
+msgid "Hasn’t joined a club"
+msgstr "Без клубу"
+
+#: templates/games/player_profile.html:30
+msgid "Games:"
+msgstr "Ігри:"
+
+#: templates/games/player_profile.html:31
+msgid "Wins:"
+msgstr "Перемоги:"
+
+#: templates/games/player_profile.html:32
+msgid "Win Rate:"
+msgstr "Перемоги %:"
+
+#: templates/games/player_profile.html:33
+msgid "Average Rank:"
+msgstr "Середнє місце:"
+
+#: templates/games/player_profile.html:35
+msgid "Average Result:"
+msgstr "Середній результат:"
+
+#: templates/games/player_profile.html:38
+msgid "Average Points:"
+msgstr "Середній рахунок:"
+
+#: templates/games/player_profile.html:47
+msgid "Trends"
+msgstr "Динаміка"
+
+#: templates/games/player_profile.html:54
+msgid "Recent Games"
+msgstr "Останні ігри"
+
+#: templates/games/player_profile.html:64
+#, python-format
+msgid "No games found for %(player_name)s."
+msgstr "Ігор для %(player_name)s не знайдено. "
+
+#: templates/home.html:19
+msgid "All Clubs"
+msgstr "Усі Клуби"
+
+#: templates/home.html:48
+msgid "No games yet."
+msgstr "Ігор ще немає"
+
+#: templates/home.html:49
+msgid "Add your first game in Admin"
+msgstr "Додайте першу гру через Admin"

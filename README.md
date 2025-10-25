@@ -100,3 +100,8 @@ cp .env.example ~/apps/riichi-tracker/.env  # then edit it for production
 ```
 
 Once secrets are set, push to `main` to trigger deployment.
+
+### Translations
+ ./dev django-admin makemessages -l uk
+./dev django-admin compilemessages
+

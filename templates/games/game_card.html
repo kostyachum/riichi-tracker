@@ -1,19 +1,21 @@
 {% load humanize l10n tz %}
+{% load l10n %}
+{% load i18n %}
 
 <div class="card bg-base-100 shadow-md mb-4">
   <div class="card-body p-4">
     <!-- Header -->
     <div class="flex justify-between items-center mb-2">
       <div class="flex gap-4 items-center">
-        <h4 class="card-title m-0 shrink-0">Game #{{ game.id }}</h4>
+        <h4 class="card-title m-0 shrink-0">{% trans "Game" %} #{{ game.id }}</h4>
         <span class="text-sm opacity-70">{{ game.played_at|localtime|date:"d F Y" }} at {{ game.played_at|localtime|date:"H:i" }}</span>
         <span class="text-sm opacity-80"></span>
         <span class="text-sm text-base-content/60 hidden md:inline">
-          Rules: {{ games.first.rule_label }}
+          {{ games.first.rule_label }}
         </span>
       </div>
       <a href="/admin/games/game/{{ game.id }}/change/"
-         class="btn btn-sm rounded-md bg-slate-200 px-3 py-1.5 text-sm font-medium text-slate-900 shadow hover:bg-slate-300">Edit</a>
+         class="btn btn-soft btn-sm">{% trans "Edit" %}</a>
     </div>
 
     <!-- Inline player scores -->

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import JsonResponse
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from games.views import home, player_profile
@@ -14,6 +14,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("admin/", admin.site.urls),
     path("health/", health, name="health"),
+    path('i18n/', include('django.conf.urls.i18n')),
     path("player/<int:player_id>/", player_profile, name="player_profile"),
 ]
 
