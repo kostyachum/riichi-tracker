@@ -1,3 +1,4 @@
+{% load tz %}
 <!doctype html>
 <html lang="en" class="h-full">
 <head>
@@ -16,6 +17,24 @@
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <meta name="theme-color" content="#ffffff">
 
+     <script>
+            {% get_current_timezone as TIME_ZONE %}
+            window.TIME_ZONE = '{{TIME_ZONE}}'  // timezone server thinks we're in
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const expiry_date = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+                    expires = "; expires=" + expiry_date.toUTCString();
+                }
+                document.cookie = name + "=" + encodeURIComponent(value || "") + expires + "; path=/";
+            }
+            function setTimezoneCookie() {
+                if (window.gmt_offset) return
+                window.GMT_OFFSET = -(new Date).getTimezoneOffset()
+                window.setCookie('GMT_OFFSET', window.GMT_OFFSET, 365)
+            }
+            setTimezoneCookie()
+        </script>
 </head>
 <body class="min-h-full bg-slate-50 text-slate-800">
 <div class="max-w-5xl mx-auto p-6">

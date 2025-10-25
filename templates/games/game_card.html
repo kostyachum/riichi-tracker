@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load humanize l10n tz %}
 
 <div class="card bg-base-100 shadow-md mb-4">
   <div class="card-body p-4">
@@ -6,7 +6,7 @@
     <div class="flex justify-between items-center mb-2">
       <div class="flex gap-4 items-center">
         <h4 class="card-title m-0 shrink-0">Game #{{ game.id }}</h4>
-        <span class="text-sm opacity-70">{{ game.played_at|date:"d F Y" }} at {{ game.played_at|date:"H:i" }}</span>
+        <span class="text-sm opacity-70">{{ game.played_at|localtime|date:"d F Y" }} at {{ game.played_at|localtime|date:"H:i" }}</span>
         <span class="text-sm opacity-80"></span>
         <span class="text-sm text-base-content/60 hidden md:inline">
           Rules: {{ games.first.rule_label }}
