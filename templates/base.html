@@ -17,52 +17,65 @@
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <meta name="theme-color" content="#ffffff">
 
-     <script>
-            {% get_current_timezone as TIME_ZONE %}
-            window.TIME_ZONE = '{{TIME_ZONE}}'  // timezone server thinks we're in
-            function setCookie(name, value, days) {
-                let expires = "";
-                if (days) {
-                    const expiry_date = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
-                    expires = "; expires=" + expiry_date.toUTCString();
-                }
-                document.cookie = name + "=" + encodeURIComponent(value || "") + expires + "; path=/";
+    <script>
+        {%
+            get_current_timezone
+            as
+            TIME_ZONE %
+        }
+        window.TIME_ZONE = '{{TIME_ZONE}}'  // timezone server thinks we're in
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const expiry_date = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+                expires = "; expires=" + expiry_date.toUTCString();
             }
-            function setTimezoneCookie() {
-                if (window.gmt_offset) return
-                window.GMT_OFFSET = -(new Date).getTimezoneOffset()
-                window.setCookie('GMT_OFFSET', window.GMT_OFFSET, 365)
-            }
-            setTimezoneCookie()
-        </script>
+            document.cookie = name + "=" + encodeURIComponent(value || "") + expires + "; path=/";
+        }
+
+        function setTimezoneCookie() {
+            if (window.gmt_offset) return
+            window.GMT_OFFSET = -(new Date).getTimezoneOffset()
+            window.setCookie('GMT_OFFSET', window.GMT_OFFSET, 365)
+        }
+
+        setTimezoneCookie()
+    </script>
 </head>
 <body class="min-h-full bg-slate-50 text-slate-800">
 <div class="max-w-5xl mx-auto p-6">
-{% load i18n %}
+    {% load i18n %}
 
-  <nav class="flex items-start gap-2 w-full">
-  {% block header-control %}
-    <div class="ml-auto">
-      <form action="{% url 'set_language' %}" method="post" class="inline">
-        {% csrf_token %}
-        <select name="language" onchange="this.form.submit()" class="select select-sm select-neutral">
-          {% get_current_language as LANGUAGE_CODE %}
-          {% get_available_languages as LANGUAGES %}
-          {% for code, name in LANGUAGES %}
-            <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
-              {{ name }}
-            </option>
-          {% endfor %}
-        </select>
-      </form>
-    </div>
-  {% endblock %}
-  </nav>
+    <nav class="flex items-start gap-2 w-full">
+        {% block header-control %}
+        <div class="ml-auto">
+            <form action="{% url 'set_language' %}" method="post" class="inline">
+                {% csrf_token %}
+                <select name="language" onchange="this.form.submit()" class="select select-sm select-neutral">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% for code, name in LANGUAGES %}
+                    <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
+                        {{ name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        {% endblock %}
+    </nav>
 
-  {% block content %}
-  {% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
+<footer class="max-w-5xl mx-auto p-6 my-auto mt-12 border-t pt-4 text-center text-sm text-slate-500 relative ">
+    <div class="mx-auto ">
+        {% block footer %}
 
+        <p>© {% now "Y" %} Riichi Mahjong Tracker by <a href="https://thecreditsroll.com/">The Credits Roll</a></p>
+        {% endblock %}
+    </div>
+</footer>
 {% block extra_scripts %}{% endblock %}
 </body>
 </html>
