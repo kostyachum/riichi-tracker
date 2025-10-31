@@ -4,10 +4,10 @@
 {% load static %}
 
 <div class="card bg-base-100 shadow-md mb-4 border border-primary/20 relative" >
-  <div class="absolute top-0 left-0 w-[60%] h-full opacity-60 z-1" style="background-image: url('{% static "images/confetti.png" %}'); background-size: cover;  "></div>
+  <div class="absolute top-0 left-0 w-full h-full opacity-60 z-1 md:w-[60%]" style="background-image: url('{% static "images/confetti.png" %}'); background-size: cover;  "></div>
 
 
-  <a href="#" class="btn btn-soft btn-sm pointer-events-none  absolute top-3 right-3 z-10">
+  <a href="#" class="btn btn-soft btn-sm pointer-events-none absolute top-3 right-3 z-10">
     {% trans "Special Day" %}
   </a>
 
@@ -15,12 +15,12 @@
 
     <!-- Birthday message -->
     <div class="flex flex-wrap flex-col gap-y-4 text-lg md:flex-row md:items-center md:justify-between" >
-      <div class="flex items-center gap-4">
+      <div class="flex flex-col items-center gap-x-4 gap-y-2 md:flex-row">
         <!-- Text -->
-        <div class="flex flex-col gap-2  bg-white/90 p-5 text-center" >
+        <div class="flex flex-col gap-2  bg-white/90 p-5 text-center mt-10 md:mt-0" >
           <div class="flex  items-center justify-center">
             <div class="flex gap-4 items-center">
-              <h2 class="shrink-0 text-xl text-emerald-700 font-bold">
+              <h2 class=" text-xl text-emerald-700 font-bold">
                 🎉 {% trans "Happy Birthday" %}, {{ friend_name }}!
               </h2>
             </div>
@@ -34,8 +34,8 @@
         </div>
         <!-- Image -->
         <img src="{% static 'images/Tialary.png' %}"
-             alt="Birthday cake"
-             class="rounded-lg shadow-md border w-[50%]" />
+             alt="Celebratory image"
+             class="rounded-lg shadow-md border md:w-[50%]" />
       </div>
     </div>
   </div>
