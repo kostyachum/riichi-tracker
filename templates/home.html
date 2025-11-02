@@ -39,7 +39,6 @@
 {% block content %}
   <body class="bg-base-200 p-8">
     <div class="mt-8">
-    {% include 'games/birthday_card.html' with friend_name="Tialary" %}
     {% if games %}
       {% for game in games %}
         {% include "games/game_card.html" %}
