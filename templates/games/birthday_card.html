@@ -33,7 +33,7 @@
           </p>
         </div>
         <!-- Image -->
-        <img src="{% static 'images/Tialary.png' %}"
+        <img src="{% static celebratory_image|default:'images/confetti.png' %}"
              alt="Celebratory image"
              class="rounded-lg shadow-md border md:w-[50%]" />
       </div>

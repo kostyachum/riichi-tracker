@@ -39,6 +39,12 @@
 {% block content %}
   <body class="bg-base-200 p-8">
     <div class="mt-8">
+    {% now "n" as current_month %}
+    {% now "j" as current_day %}
+    {% if current_month == "11" and current_day == "25" %}
+      {% include 'games/birthday_card.html' with friend_name="Денис" celebratory_image='images/Denys.png' %}
+    {% endif %}
+
     {% if games %}
       {% for game in games %}
         {% include "games/game_card.html" %}
