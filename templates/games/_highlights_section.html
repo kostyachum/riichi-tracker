@@ -44,40 +44,38 @@
       </div>
     </details>
   </div>
-  <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-    {% for highlight in game.highlights.all %}
-      <div class="card card-compact bg-base-200/40">
-        <figure>
-          <label for="highlight-{{ highlight.id }}" class="cursor-zoom-in">
-            <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Game highlight') }}" class="rounded-md">
-          </label>
-        </figure>
-        <div class="card-body px-1 pb-1 pt-1 text-xs">
-          {% if highlight.caption %}
-            <div class="font-medium">{{ highlight.caption }}</div>
-          {% endif %}
-          {% if highlight.player %}
-            <div class="text-base-content/60">{{ highlight.player.name }}</div>
-          {% endif %}
+  {% with highlights=game.highlights.all %}
+    <div class="{% if highlights %}mt-3{% endif %} grid grid-cols-1 gap-3 md:grid-cols-2">
+      {% for highlight in highlights %}
+        <div class="card card-compact bg-base-200/40">
+          <figure>
+            <label for="highlight-{{ highlight.id }}" class="cursor-zoom-in">
+              <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Game highlight') }}" class="rounded-md">
+            </label>
+          </figure>
+          <div class="card-body px-1 pb-1 pt-1 text-xs">
+            {% if highlight.caption %}
+              <div class="font-medium">{{ highlight.caption }}</div>
+            {% endif %}
+            {% if highlight.player %}
+              <div class="text-base-content/60">{{ highlight.player.name }}</div>
+            {% endif %}
+          </div>
         </div>
-      </div>
-      <input type="checkbox" id="highlight-{{ highlight.id }}" class="modal-toggle">
-      <div class="modal" role="dialog">
-        <div class="modal-box max-w-5xl p-3">
-          <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Game highlight') }}" class="w-full rounded-md">
-          {% if highlight.caption %}
-            <div class="mt-2 text-sm">{{ highlight.caption }}</div>
-          {% endif %}
-          {% if highlight.player %}
-            <div class="text-xs text-base-content/60">{{ highlight.player.name }}</div>
-          {% endif %}
+        <input type="checkbox" id="highlight-{{ highlight.id }}" class="modal-toggle">
+        <div class="modal" role="dialog">
+          <div class="modal-box max-w-5xl p-3">
+            <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Game highlight') }}" class="w-full rounded-md">
+            {% if highlight.caption %}
+              <div class="mt-2 text-sm">{{ highlight.caption }}</div>
+            {% endif %}
+            {% if highlight.player %}
+              <div class="text-xs text-base-content/60">{{ highlight.player.name }}</div>
+            {% endif %}
+          </div>
+          <label class="modal-backdrop" for="highlight-{{ highlight.id }}"></label>
         </div>
-        <label class="modal-backdrop" for="highlight-{{ highlight.id }}"></label>
-      </div>
-    {% empty %}
-      <div class="text-sm text-base-content/60">
-        {% trans "No highlights yet." %}
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
+  {% endwith %}
 </div>

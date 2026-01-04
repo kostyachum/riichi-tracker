@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 09:56+0000\n"
+"POT-Creation-Date: 2026-01-04 14:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,39 @@ msgstr "%(target)sk результат · %(start)sk старт ·"
 msgid "Uma"
 msgstr "Ума"
 
+#: templates/games/_highlights_section.html:7
+msgid "Highlights"
+msgstr "Світлини"
+
+#: templates/games/_highlights_section.html:10
+msgid "Add Highlight"
+msgstr "Додати Світлину"
+
+#: templates/games/_highlights_section.html:17
+msgid "Player"
+msgstr "Гравець"
+
+#: templates/games/_highlights_section.html:20
+msgid "No player"
+msgstr "Немає гравця"
+
+#: templates/games/_highlights_section.html:28
+msgid "Photos"
+msgstr "Фото"
+
+#: templates/games/_highlights_section.html:34
+msgid "Caption"
+msgstr "Заголовок"
+
+#: templates/games/_highlights_section.html:40
+msgid "Save"
+msgstr "Зберегти"
+
+#: templates/games/_highlights_section.html:52
+#: templates/games/_highlights_section.html:67
+msgid "Game highlight"
+msgstr "Пам’ятна подія в грі"
+
 #: templates/games/birthday_card.html:11
 msgid "Special Day"
 msgstr "Особливий День"
@@ -42,7 +75,9 @@ msgstr "З Днем Народження"
 msgid ""
 "Wishing you a fantastic year ahead filled with good luck, laughter, and many "
 "mahjong wins!"
-msgstr "Бажаємо тобі чудового року, сповненого удачі, сміху та численних перемог у маджонгу!"
+msgstr ""
+"Бажаємо тобі чудового року, сповненого удачі, сміху та численних перемог у "
+"маджонгу!"
 
 #: templates/games/birthday_card.html:32
 msgid "From all your friends at the club ❤️"
@@ -109,10 +144,10 @@ msgstr "Ігор для %(player_name)s не знайдено. "
 msgid "All Clubs"
 msgstr "Усі Клуби"
 
-#: templates/home.html:49
+#: templates/home.html:54
 msgid "No games yet."
 msgstr "Ігор ще немає"
 
-#: templates/home.html:50
+#: templates/home.html:55
 msgid "Add your first game in Admin"
 msgstr "Додайте першу гру через Admin"
