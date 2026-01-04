@@ -1,9 +1,10 @@
 from django.db.models import Prefetch, Avg, Count, Q
-from .models import Game, GameResult, Player, Club
+from .models import Game, GameResult, Player, Club, GameHighlight
 
 
 def get_latest_games(club_id=None, game_ids=None):
     results_qs = GameResult.objects.select_related("player").order_by("rank", "-score_raw")
+    highlights_qs = GameHighlight.objects.select_related("player").order_by("created_at")
 
     games_qs = Game.objects.all()
 
@@ -15,7 +16,10 @@ def get_latest_games(club_id=None, game_ids=None):
             gameresult__player__clubs__id=club_id
         ).distinct()
 
-    return games_qs.order_by("-played_at").prefetch_related(Prefetch("gameresult_set", queryset=results_qs))[:50]
+    return games_qs.order_by("-played_at").prefetch_related(
+        Prefetch("gameresult_set", queryset=results_qs),
+        Prefetch("highlights", queryset=highlights_qs),
+    )[:50]
 
 
 def get_club_id_by_slug(club_slug):
