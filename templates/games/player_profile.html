@@ -81,16 +81,23 @@
               fill: false,
               pointRadius: 5,
               borderWidth: 2,
+              clip: false,
           }]
       };
       const options = {
           responsive: true,
           maintainAspectRatio: false,
+          layout: {
+              padding: {
+                  top: 8,
+                  bottom: 8,
+              },
+          },
           scales: {
               y: {
                   reverse: true,
-                  min: 0,
-                  max: 5,
+                  min: 1,
+                  max: 4,
                   ticks: {
                       stepSize: 1,
                       callback: v => ['1st', '2nd', '3rd', '4th'][v - 1] || ''
