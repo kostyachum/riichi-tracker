@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Player, Game, GameResult, Avatar, Club
+from .models import Player, Game, GameResult, Avatar, Club, GameHighlight
 from .forms import GameResultInlineFormSet
 
 
@@ -72,6 +72,23 @@ class GameResultAdmin(admin.ModelAdmin):
     ordering = ("-game__played_at", "rank")
     autocomplete_fields = ("player",)
     raw_id_fields = ("game",)
+
+
+@admin.register(GameHighlight)
+class GameHighlightAdmin(admin.ModelAdmin):
+    list_display = ("id", "game", "player", "caption", "created_at", "photo_preview")
+    list_select_related = ("game", "player")
+    list_filter = ("created_at", "game", "player")
+    search_fields = ("caption", "player__name")
+    raw_id_fields = ("game", "player")
+    readonly_fields = ("photo_preview",)
+
+    def photo_preview(self, instance):
+        if instance.photo:
+            return mark_safe(f'<img src="{instance.photo.url}" width="120" />')
+        return "-"
+
+    photo_preview.short_description = "Photo"
 
 
 class PlayerInline(admin.TabularInline):

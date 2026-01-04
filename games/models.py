@@ -103,6 +103,17 @@ class Game(models.Model):
         return f"{oka}{uma_word} +{self.uma_top} / {second_display} / {self.uma_third} / {self.uma_last}"
 
 
+class GameHighlight(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="highlights", null=True, blank=True)
+    player = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name="highlights", null=True, blank=True)
+    photo = models.FileField(upload_to="game_highlights/")
+    caption = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "Game Highlight"
+
+
 class GameResult(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

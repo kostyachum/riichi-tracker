@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseBadRequest
 from django.db.models import Avg, Count, Q
-from .models import GameResult, Player
+from .models import GameResult, Player, Game, GameHighlight
 from .services import get_latest_games, get_all_clubs, get_club_id_by_slug
 
 
@@ -38,3 +39,32 @@ def player_profile(request, player_id):
         "stats": stats,
         "recent_ranks": recent_ranks,
     })
+
+
+def create_game_highlight(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("POST required")
+
+    game_id = request.POST.get("game_id")
+    player_id = request.POST.get("player_id") or None
+    caption = request.POST.get("caption", "").strip()
+    photos = request.FILES.getlist("photos")
+
+    if not photos:
+        return HttpResponseBadRequest("No photos uploaded")
+
+    game = get_object_or_404(Game, pk=game_id) if game_id else None
+    player = get_object_or_404(Player, pk=player_id) if player_id else None
+
+    if game and player and not GameResult.objects.filter(game=game, player=player).exists():
+        return HttpResponseBadRequest("Player not in game")
+
+    for photo in photos:
+        GameHighlight.objects.create(
+            game=game,
+            player=player,
+            photo=photo,
+            caption=caption,
+        )
+
+    return redirect(request.META.get("HTTP_REFERER", "/"))
