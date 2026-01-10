@@ -59,6 +59,7 @@ class Player(models.Model):
 
 class Game(models.Model):
     played_at = models.DateTimeField(auto_now_add=True)
+    is_unranked = models.BooleanField(default=False, verbose_name=_("Unranked game"), help_text=_("Unranked game will not affect stats"))
     oka_value = models.IntegerField(default=20000)   # total oka bonus (points)
     start_score = models.IntegerField(default=25000)
     target_score = models.IntegerField(default=25000)

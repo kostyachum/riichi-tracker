@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 14:11+0000\n"
+"POT-Creation-Date: 2026-01-10 17:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,12 +21,20 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: games/models.py:98
+#: games/models.py:62
+msgid "Unranked game"
+msgstr "Гра поза рейтингом"
+
+#: games/models.py:62
+msgid "Unranked game will not affect stats"
+msgstr "Гра поза рейтингом не вплине на статистику"
+
+#: games/models.py:99
 #, python-format
 msgid "%(target)sk return · %(start)sk start ·"
 msgstr "%(target)sk результат · %(start)sk старт ·"
 
-#: games/models.py:102
+#: games/models.py:103
 msgid "Uma"
 msgstr "Ума"
 
@@ -58,8 +66,8 @@ msgstr "Заголовок"
 msgid "Save"
 msgstr "Зберегти"
 
-#: templates/games/_highlights_section.html:52
-#: templates/games/_highlights_section.html:67
+#: templates/games/_highlights_section.html:53
+#: templates/games/_highlights_section.html:68
 msgid "Game highlight"
 msgstr "Пам’ятна подія в грі"
 
@@ -87,7 +95,15 @@ msgstr "Від усіх твоїх друзів у клубі ❤️"
 msgid "Game"
 msgstr "Гра"
 
-#: templates/games/game_card.html:18
+#: templates/games/game_card.html:12
+msgid "Unranked games are excluded from stats"
+msgstr "Ігри поза рейтингом не впливають на статистику"
+
+#: templates/games/game_card.html:13
+msgid "Unranked"
+msgstr "Нерейтингова"
+
+#: templates/games/game_card.html:23
 msgid "Edit"
 msgstr "Змінити"
 

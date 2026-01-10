@@ -41,14 +41,30 @@ class GameResultInline(admin.TabularInline):
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {"fields": ( "is_unranked", )}),
+        ("Scoring rules", {
+            "fields": (
+                "oka_value",
+                "start_score",
+                "target_score",
+                "uma_top",
+                "uma_second",
+                "uma_third",
+                "uma_last",
+            ),
+            "classes": ("collapse",),
+        }),
+    )
     list_display = (
         "id",
         "played_at",
         "start_score",
         "target_score",
         "oka_value",
+        "is_unranked",
     )
-    list_filter = ("played_at",)
+    list_filter = ("played_at", "is_unranked")
     date_hierarchy = "played_at"
     inlines = [GameResultInline]
     readonly_fields = ()

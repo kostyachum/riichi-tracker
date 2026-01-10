@@ -5,12 +5,16 @@
 <div class="card bg-base-100 shadow-md mb-4">
   <div class="card-body p-4">
     <!-- Header -->
-    <div class="flex justify-between items-center mb-2">
-      <div class="flex gap-4 items-center">
+    <div class="flex flex-col gap-2 mb-2 md:flex-row md:items-center md:justify-between">
+      <div class="flex flex-wrap gap-2 items-center">
         <h4 class="card-title m-0 shrink-0">{% trans "Game" %} #{{ game.id }}</h4>
+        {% if game.is_unranked %}
+          <div class="tooltip tooltip-top" data-tip="{% trans "Unranked games are excluded from stats" %}">
+            <span class="badge badge-warning badge-outline">{% trans "Unranked" %}</span>
+          </div>
+        {% endif %}
         <span class="text-sm opacity-70">{{ game.played_at|localtime|date:"d F Y" }} at {{ game.played_at|localtime|date:"H:i" }}</span>
-        <span class="text-sm opacity-80"></span>
-        <span class="text-sm text-base-content/60 hidden md:inline">
+        <span class="text-sm text-base-content/60 hidden lg:inline">
           {{ games.first.rule_label }}
         </span>
       </div>

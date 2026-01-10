@@ -17,9 +17,10 @@ def home(request):
 def player_profile(request, player_id):
     player = get_object_or_404(Player.objects.select_related('avatar').prefetch_related('clubs'), pk=player_id)
     results = GameResult.objects.filter(player=player)
+    ranked_results = results.exclude(game__is_unranked=True)
     game_ids = list(results.values_list("game_id", flat=True))
     games = get_latest_games(game_ids=game_ids) if game_ids else []
-    stats = results.aggregate(
+    stats = ranked_results.aggregate(
         avg_score=Avg("score_adjusted"),
         avg_raw=Avg("score_raw"),
         avg_rank=Avg("rank"),
@@ -28,7 +29,7 @@ def player_profile(request, player_id):
     )
     stats["win_rate"] = (stats["wins"] / stats["total_games"] * 100) if stats["total_games"] else 0
     recent_results = (
-        results
+        ranked_results
         .order_by("-created_at")[:10]
         .values_list("rank", flat=True)
     )

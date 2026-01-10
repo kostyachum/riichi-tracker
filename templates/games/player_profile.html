@@ -27,7 +27,7 @@
 
         <!-- Stats summary -->
         <div class="flex flex-wrap gap-2 mt-2">
-          <div class="badge badge-outline text-sm">{% trans "Games:" %} {{ games|length }}</div>
+          <div class="badge badge-outline text-sm">{% trans "Games:" %} {{ stats.total_games }}</div>
           <div class="badge badge-outline">{% trans "Wins:" %} {{ stats.wins }}</div>
           <div class="badge badge-outline">{% trans "Win Rate:" %} {{ stats.win_rate|floatformat:1 }}%</div>
           <div class="badge badge-outline">{% trans "Average Rank:" %} {{ stats.avg_rank|floatformat:2 }}</div>
