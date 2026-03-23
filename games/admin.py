@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import Player, Game, GameResult, Avatar, Club, GameHighlight
-from .forms import GameResultInlineFormSet
+from .forms import GameResultInlineForm, GameResultInlineFormSet
 
 
 @admin.register(Player)
@@ -30,6 +30,7 @@ class AvatarAdmin(admin.ModelAdmin):
 
 class GameResultInline(admin.TabularInline):
     model = GameResult
+    form = GameResultInlineForm
     formset = GameResultInlineFormSet
     extra = 4
     min_num = 0

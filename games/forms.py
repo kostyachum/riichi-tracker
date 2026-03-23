@@ -126,3 +126,14 @@ class GameCreateForm(forms.Form):
             }
             for index in range(1, 5)
         ]
+
+
+class GameResultInlineForm(forms.ModelForm):
+    class Meta:
+        model = GameResult
+        fields = "__all__"
+
+    def validate_unique(self):
+        # Admin swaps can temporarily look like duplicate (game, player) pairs
+        # against rows that are about to be replaced atomically by the formset.
+        return

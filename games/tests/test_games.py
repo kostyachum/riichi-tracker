@@ -5,7 +5,7 @@ from django.forms import inlineformset_factory
 from django.urls import reverse
 from django.utils import timezone
 from games.models import Game, GameResult, Player, Club
-from games.forms import GameResultInlineFormSet
+from games.forms import GameResultInlineForm, GameResultInlineFormSet
 from games.services import get_latest_games
 
 
@@ -162,6 +162,7 @@ def test_game_result_inline_formset_allows_swapping_players():
     formset_class = inlineformset_factory(
         Game,
         GameResult,
+        form=GameResultInlineForm,
         formset=GameResultInlineFormSet,
         fields=("player", "score_raw"),
         extra=0,

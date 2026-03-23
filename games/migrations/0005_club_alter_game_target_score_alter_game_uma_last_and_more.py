@@ -4,10 +4,24 @@ from django.db import migrations, models
 
 
 def repopulate_uma_oka(apps, schema_editor):
-    from games.models import Game
+    Game = apps.get_model('games', 'Game')
+    GameResult = apps.get_model('games', 'GameResult')
+
     Game.objects.all().update(target_score=25000, uma_top=15, uma_second=5, uma_third=-5, uma_last=-15)
+
     for game in Game.objects.all():
-        game.calculate_final_scores()
+        results = list(GameResult.objects.filter(game=game).order_by('-score_raw', 'id'))
+        if len(results) != 4:
+            continue
+
+        uma_values = [game.uma_top, game.uma_second, game.uma_third, game.uma_last]
+        for rank, (result, uma) in enumerate(zip(results, uma_values), start=1):
+            diff_from_target = (result.score_raw - game.target_score) / 1000
+            if rank == 1:
+                diff_from_target += game.oka_value / 1000
+            result.rank = rank
+            result.score_adjusted = diff_from_target + uma
+            result.save(update_fields=['rank', 'score_adjusted'])
 
 
 class Migration(migrations.Migration):
