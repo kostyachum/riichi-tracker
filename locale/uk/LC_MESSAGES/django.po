@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 17:17+0000\n"
+"POT-Creation-Date: 2026-03-23 19:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: games/models.py:62
+#: games/models.py:62 templates/games/_add_game_modal.html:21
 msgid "Unranked game"
 msgstr "Гра поза рейтингом"
 
@@ -37,6 +37,48 @@ msgstr "%(target)sk результат · %(start)sk старт ·"
 #: games/models.py:103
 msgid "Uma"
 msgstr "Ума"
+
+#: templates/games/_add_game_modal.html:6
+#: templates/games/_add_game_modal.html:84
+msgid "Close"
+msgstr "Закрити"
+
+#: templates/games/_add_game_modal.html:8 templates/home.html:43
+msgid "Add game"
+msgstr "Додати гру"
+
+#: templates/games/_add_game_modal.html:27
+msgid "Player 1"
+msgstr "Гравець 1"
+
+#: templates/games/_add_game_modal.html:32
+#: templates/games/_add_game_modal.html:44
+#: templates/games/_add_game_modal.html:56
+#: templates/games/_add_game_modal.html:68
+msgid "Score"
+msgstr "Рахунок"
+
+#: templates/games/_add_game_modal.html:39
+msgid "Player 2"
+msgstr "Гравець 2"
+
+#: templates/games/_add_game_modal.html:51
+msgid "Player 3"
+msgstr "Гравець 3"
+
+#: templates/games/_add_game_modal.html:63
+msgid "Player 4"
+msgstr "Гравець 4"
+
+#: templates/games/_add_game_modal.html:77
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: templates/games/_add_game_modal.html:79
+#, fuzzy
+#| msgid "Unranked game"
+msgid "Save game"
+msgstr "Гра поза рейтингом"
 
 #: templates/games/_highlights_section.html:7
 msgid "Highlights"
@@ -103,7 +145,7 @@ msgstr "Ігри поза рейтингом не впливають на ста
 msgid "Unranked"
 msgstr "Нерейтингова"
 
-#: templates/games/game_card.html:23
+#: templates/games/game_card.html:22
 msgid "Edit"
 msgstr "Змінити"
 
@@ -160,10 +202,14 @@ msgstr "Ігор для %(player_name)s не знайдено. "
 msgid "All Clubs"
 msgstr "Усі Клуби"
 
-#: templates/home.html:54
+#: templates/home.html:47
+msgid "Login"
+msgstr "Увійти"
+
+#: templates/home.html:71
 msgid "No games yet."
 msgstr "Ігор ще немає"
 
-#: templates/home.html:55
+#: templates/home.html:72
 msgid "Add your first game in Admin"
 msgstr "Додайте першу гру через Admin"

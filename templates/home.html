@@ -3,8 +3,8 @@
 {% load i18n %}
 
 {% block header-control %}
-  <div class="flex grow-1 flex-col md:flex-row md:items-start ">
-    <header class="flex items-center ">
+  <div class="flex flex-col w-full gap-4 md:flex-row md:items-start">
+    <header class="flex  items-center">
       <div class="text-2xl font-semibold tracking-tight flex items-center gap-4">
         <img src="{% static 'logo.png' %}" alt="Riichi Tracker logo" class="h-17 w-17 bg-emerald-900 border rounded-md"/>
         <div class="flex flex-col">
@@ -13,7 +13,7 @@
             <select
                 name="club"
                 id="club"
-                class="select select-sm select-bordered w-full max-w-xs"
+                class="select select-sm select-neutral w-full max-w-xs"
                 onchange="this.form.submit()"
             >
               <option value="">{% trans "All Clubs" %}</option>
@@ -31,10 +31,25 @@
       </div>
     </header>
 
-    <div class="flex gap-2 mt-4 md:ml-auto md:mt-0">
-      <a href="/admin/" class="btn btn-outline btn-sm ">Admin</a>
+    <div class="flex w-full gap-2 md:ml-auto md:w-auto">
+      {% if request.user.is_authenticated %}
+        <a href="/admin/" class="btn btn-soft btn-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 8a7 7 0 1 1 14 0H3Z" />
+          </svg>
+          {{ request.user.get_username }}
+        </a>
+        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('add-game-modal').showModal()">
+          {% trans "Add game" %}
+        </button>
+      {% else %}
+        <a href="{% url 'admin:login' %}?next=/" class="btn btn-outline btn-sm">
+          {% trans "Login" %}
+        </a>
+      {% endif %}
     </div>
   </div>
+  {% include "games/_add_game_modal.html" %}
   {{ block.super }}
 {% endblock %}
 
@@ -59,4 +74,12 @@
     {% endif %}
     </div>
   </body>
+{% endblock %}
+
+{% block extra_scripts %}
+  {% if show_game_modal %}
+    <script>
+      document.getElementById('add-game-modal')?.showModal();
+    </script>
+  {% endif %}
 {% endblock %}

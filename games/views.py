@@ -1,17 +1,43 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseBadRequest
+from django.db import transaction
 from django.db.models import Avg, Count, Q
+from django.contrib.auth.decorators import login_required
+from urllib.parse import urlparse, parse_qs
 from .models import GameResult, Player, Game, GameHighlight
 from .services import get_latest_games, get_all_clubs, get_club_id_by_slug
+from .forms import GameCreateForm
 
 
-def home(request):
+def _get_club_slug(request):
     club_slug = request.GET.get("club")
+    if club_slug:
+        return club_slug
+
+    next_url = request.POST.get("next")
+    if not next_url:
+        return None
+
+    query = parse_qs(urlparse(next_url).query)
+    return query.get("club", [None])[0]
+
+
+def _render_home(request, game_form=None, show_game_modal=False):
+    club_slug = _get_club_slug(request)
     club_id = get_club_id_by_slug(club_slug) if club_slug else None
     games = get_latest_games(club_id=club_id)
     clubs = get_all_clubs()
-    data = {"games": games, "clubs": clubs,}
+    data = {
+        "games": games,
+        "clubs": clubs,
+        "game_form": game_form or GameCreateForm(),
+        "show_game_modal": show_game_modal,
+    }
     return render(request, "home.html", data)
+
+
+def home(request):
+    return _render_home(request)
 
 
 def player_profile(request, player_id):
@@ -69,3 +95,20 @@ def create_game_highlight(request):
         )
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required(login_url="/admin/login/")
+def create_game(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("POST required")
+
+    form = GameCreateForm(request.POST)
+    if not form.is_valid():
+        return _render_home(request, game_form=form, show_game_modal=True)
+
+    with transaction.atomic():
+        game = Game.objects.create(is_unranked=form.cleaned_data["is_unranked"])
+        for result in form.cleaned_results():
+            GameResult.objects.create(game=game, **result)
+
+    return redirect("/")

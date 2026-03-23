@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from games.views import home, player_profile, create_game_highlight
+from games.views import home, player_profile, create_game, create_game_highlight
 
 
 def health(_request):
@@ -16,6 +16,7 @@ urlpatterns = [
     path("health/", health, name="health"),
     path('i18n/', include('django.conf.urls.i18n')),
     path("player/<int:player_id>/", player_profile, name="player_profile"),
+    path("games/create/", create_game, name="game_create"),
     path("highlights/create/", create_game_highlight, name="game_highlight_create"),
 ]
 
