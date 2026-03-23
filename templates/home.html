@@ -3,35 +3,37 @@
 {% load i18n %}
 
 {% block header-control %}
-  <div class="flex grow-1 items-start">
-  <header class="flex items-center justify-between">
-    <div class="text-2xl font-semibold tracking-tight flex items-center gap-4">
-      <img src="{% static 'logo.png' %}" alt="Riichi Tracker logo" class="h-17 w-17 bg-emerald-900 border rounded-md"/>
-      <div class="flex flex-col">
-        <h1 class="mb-1">Riichi Mahjong Tracker</h1>
-        <form method="get">
-          <select
-              name="club"
-              id="club"
-              class="select select-sm select-bordered w-full max-w-xs"
-              onchange="this.form.submit()"
-          >
-            <option value="">{% trans "All Clubs" %}</option>
-            {% for c in clubs %}
-              <option
-                  value="{{ c.slug }}"
-                  {% if request.GET.club|default:'' == c.slug|stringformat:'s' %}selected{% endif %}
-              >
-                {{ c.display_name }}
-              </option>
-            {% endfor %}
-          </select>
-        </form>
+  <div class="flex grow-1 flex-col md:flex-row md:items-start ">
+    <header class="flex items-center ">
+      <div class="text-2xl font-semibold tracking-tight flex items-center gap-4">
+        <img src="{% static 'logo.png' %}" alt="Riichi Tracker logo" class="h-17 w-17 bg-emerald-900 border rounded-md"/>
+        <div class="flex flex-col">
+          <h1 class="mb-1">Riichi Mahjong Tracker</h1>
+          <form method="get">
+            <select
+                name="club"
+                id="club"
+                class="select select-sm select-bordered w-full max-w-xs"
+                onchange="this.form.submit()"
+            >
+              <option value="">{% trans "All Clubs" %}</option>
+              {% for c in clubs %}
+                <option
+                    value="{{ c.slug }}"
+                    {% if request.GET.club|default:'' == c.slug|stringformat:'s' %}selected{% endif %}
+                >
+                  {{ c.display_name }}
+                </option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-    <a href="/admin/" class="btn btn-outline btn-sm ml-auto ">Admin</a>
+    <div class="flex gap-2 mt-4 md:ml-auto md:mt-0">
+      <a href="/admin/" class="btn btn-outline btn-sm ">Admin</a>
+    </div>
   </div>
   {{ block.super }}
 {% endblock %}
