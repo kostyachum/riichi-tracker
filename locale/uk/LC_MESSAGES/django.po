@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 19:58+0000\n"
+"POT-Creation-Date: 2026-04-10 13:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,8 @@ msgid "Uma"
 msgstr "Ума"
 
 #: templates/games/_add_game_modal.html:6
-#: templates/games/_add_game_modal.html:84
+#: templates/games/_add_game_modal.html:84 templates/home.html:62
+#: templates/home.html:71
 msgid "Close"
 msgstr "Закрити"
 
@@ -206,10 +207,18 @@ msgstr "Усі Клуби"
 msgid "Login"
 msgstr "Увійти"
 
-#: templates/home.html:71
+#: templates/home.html:55
+msgid "Scoring table"
+msgstr "Таблиця виплат"
+
+#: templates/home.html:66
+msgid "Riichi mahjong scoring table"
+msgstr "Ріічі маджонг - Таблиця виплат"
+
+#: templates/home.html:93
 msgid "No games yet."
 msgstr "Ігор ще немає"
 
-#: templates/home.html:72
+#: templates/home.html:94
 msgid "Add your first game in Admin"
 msgstr "Додайте першу гру через Admin"

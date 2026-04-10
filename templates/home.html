@@ -47,8 +47,30 @@
           {% trans "Login" %}
         </a>
       {% endif %}
+      <button
+        type="button"
+        class="btn btn-outline btn-sm"
+        onclick="document.getElementById('scoring-table-modal').showModal()"
+      >
+        {% trans "Scoring table" %}
+      </button>
     </div>
   </div>
+  <dialog id="scoring-table-modal" class="modal">
+    <div class="modal-box max-h-[90dvh] max-w-6xl p-2 sm:p-4">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-0 top-0 md:top-3 md:right-3" aria-label="{% trans 'Close' %}">✕</button>
+      </form>
+      <img
+        src="{% static 'images/scoring.png' %}"
+        alt="{% trans 'Riichi mahjong scoring table' %}"
+        class="h-auto w-full rounded-md"
+      />
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>{% trans "Close" %}</button>
+    </form>
+  </dialog>
   {% include "games/_add_game_modal.html" %}
   {{ block.super }}
 {% endblock %}
