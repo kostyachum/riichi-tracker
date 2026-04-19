@@ -6,7 +6,7 @@
       <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3" aria-label="{% trans 'Close' %}">✕</button>
     </form>
     <h2 class="text-xl font-semibold">{% trans "Add game" %}</h2>
-    <form method="post" action="{% url 'game_create' %}" class="mt-6 space-y-4">
+    <form method="post" action="{% url 'game_create' %}" class="mt-4 space-y-4">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ request.get_full_path }}">
 
@@ -22,7 +22,7 @@
       </label>
 
       <div class="grid gap-3">
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_8rem]">
+        <div class="grid grid-cols-[minmax(0,1fr)_8rem] gap-3">
           <div>
             <label class="label" for="{{ game_form.player_1.id_for_label }}"><span class="label-text text-sm">{% trans "Player 1" %}</span></label>
             {{ game_form.player_1 }}
@@ -34,7 +34,7 @@
             {% if game_form.score_1.errors %}<p class="mt-1 text-sm text-error">{{ game_form.score_1.errors|join:", " }}</p>{% endif %}
           </div>
         </div>
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_8rem]">
+        <div class="grid grid-cols-[minmax(0,1fr)_8rem] gap-3">
           <div>
             <label class="label" for="{{ game_form.player_2.id_for_label }}"><span class="label-text text-sm">{% trans "Player 2" %}</span></label>
             {{ game_form.player_2 }}
@@ -46,7 +46,7 @@
             {% if game_form.score_2.errors %}<p class="mt-1 text-sm text-error">{{ game_form.score_2.errors|join:", " }}</p>{% endif %}
           </div>
         </div>
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_8rem]">
+        <div class="grid grid-cols-[minmax(0,1fr)_8rem] gap-3">
           <div>
             <label class="label" for="{{ game_form.player_3.id_for_label }}"><span class="label-text text-sm">{% trans "Player 3" %}</span></label>
             {{ game_form.player_3 }}
@@ -58,7 +58,7 @@
             {% if game_form.score_3.errors %}<p class="mt-1 text-sm text-error">{{ game_form.score_3.errors|join:", " }}</p>{% endif %}
           </div>
         </div>
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_8rem]">
+        <div class="grid grid-cols-[minmax(0,1fr)_8rem] gap-3">
           <div>
             <label class="label" for="{{ game_form.player_4.id_for_label }}"><span class="label-text text-sm">{% trans "Player 4" %}</span></label>
             {{ game_form.player_4 }}
