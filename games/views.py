@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import Avg, Count, Q
 from django.contrib.auth.decorators import login_required
 from urllib.parse import urlparse, parse_qs
+from birthdays.services import get_today_birthdays
 from .models import GameResult, Player, Game, GameHighlight
 from .services import get_latest_games, get_all_clubs, get_club_id_by_slug
 from .forms import GameCreateForm
@@ -30,6 +31,7 @@ def _render_home(request, game_form=None, show_game_modal=False):
     data = {
         "games": games,
         "clubs": clubs,
+        "birthdays": get_today_birthdays(),
         "game_form": game_form or GameCreateForm(),
         "show_game_modal": show_game_modal,
     }

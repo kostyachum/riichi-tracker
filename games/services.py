@@ -1,5 +1,5 @@
-from django.db.models import Prefetch, Avg, Count, Q
-from .models import Game, GameResult, Player, Club, GameHighlight
+from django.db.models import Prefetch
+from .models import Club, Game, GameHighlight, GameResult
 
 
 def get_latest_games(club_id=None, game_ids=None):
@@ -29,3 +29,4 @@ def get_club_id_by_slug(club_slug):
 
 def get_all_clubs():
     return Club.objects.all().order_by("name")
+

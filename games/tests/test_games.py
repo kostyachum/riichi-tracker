@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.forms import inlineformset_factory
 from django.urls import reverse
 from django.utils import timezone
+from birthdays.models import Birthday
 from games.models import Game, GameResult, Player, Club
 from games.forms import GameResultInlineForm, GameResultInlineFormSet
 from games.services import get_latest_games
@@ -83,6 +84,21 @@ def test_get_latest_games_filters_by_ids_and_ordering():
     # Ordering check (latest first)
     all_games = list(get_latest_games())
     assert [g.id for g in all_games] == [g_new.id, g_old.id]
+
+
+@pytest.mark.django_db
+def test_home_renders_all_birthdays_for_today(client):
+    today = timezone.localdate()
+    Birthday.objects.create(friend_name="First", month=today.month, day=today.day, sort_order=2)
+    Birthday.objects.create(friend_name="Second", month=today.month, day=today.day, sort_order=1)
+
+    response = client.get(reverse("home"))
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert "Happy Birthday" in content
+    assert "First" in content
+    assert "Second" in content
 
 
 @pytest.mark.django_db

@@ -1,4 +1,3 @@
-{% load humanize l10n tz %}
 {% load l10n %}
 {% load i18n %}
 {% load static %}
@@ -21,7 +20,7 @@
           <div class="flex  items-center justify-center">
             <div class="flex gap-4 items-center">
               <h2 class=" text-xl text-emerald-700 font-bold">
-                🎉 {% trans "Happy Birthday" %}, {{ friend_name }}!
+                🎉 {% trans "Happy Birthday" %}, {{ birthday.friend_name }}!
               </h2>
             </div>
           </div>
@@ -33,7 +32,7 @@
           </p>
         </div>
         <!-- Image -->
-        <img src="{% static celebratory_image|default:'images/confetti.png' %}"
+        <img src="{% if birthday.celebratory_image %}{{ birthday.celebratory_image.url }}{% else %}{% static 'images/confetti.png' %}{% endif %}"
              alt="Celebratory image"
              class="rounded-lg shadow-md border md:w-[50%]" />
       </div>

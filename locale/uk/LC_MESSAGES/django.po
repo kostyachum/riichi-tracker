@@ -114,15 +114,15 @@ msgstr "Зберегти"
 msgid "Game highlight"
 msgstr "Пам’ятна подія в грі"
 
-#: templates/games/birthday_card.html:11
+#: templates/birthdays/birthday_card.html:10
 msgid "Special Day"
 msgstr "Особливий День"
 
-#: templates/games/birthday_card.html:24
+#: templates/birthdays/birthday_card.html:23
 msgid "Happy Birthday"
 msgstr "З Днем Народження"
 
-#: templates/games/birthday_card.html:29
+#: templates/birthdays/birthday_card.html:28
 msgid ""
 "Wishing you a fantastic year ahead filled with good luck, laughter, and many "
 "mahjong wins!"
@@ -130,7 +130,7 @@ msgstr ""
 "Бажаємо тобі чудового року, сповненого удачі, сміху та численних перемог у "
 "маджонгу!"
 
-#: templates/games/birthday_card.html:32
+#: templates/birthdays/birthday_card.html:31
 msgid "From all your friends at the club ❤️"
 msgstr "Від усіх твоїх друзів у клубі ❤️"
 
