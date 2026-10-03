@@ -31,7 +31,7 @@
       </div>
     </header>
 
-    <div class="flex w-full gap-2 md:ml-auto md:w-auto">
+    <div class="flex w-full flex-wrap gap-2 md:ml-auto md:w-auto">
       {% if request.user.is_authenticated %}
         <a href="/admin/" class="btn btn-soft btn-sm">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -47,6 +47,9 @@
           {% trans "Login" %}
         </a>
       {% endif %}
+      <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('add-highlight-modal').showModal()">
+        {% trans "Add highlight" %}
+      </button>
       <button
         type="button"
         class="btn btn-outline btn-sm"
@@ -72,6 +75,7 @@
     </form>
   </dialog>
   {% include "games/_add_game_modal.html" %}
+  {% include "games/_add_highlight_modal.html" %}
   {{ block.super }}
 {% endblock %}
 
@@ -81,6 +85,28 @@
     {% for birthday in birthdays %}
       {% include 'birthdays/birthday_card.html' with birthday=birthday %}
     {% endfor %}
+
+    {% if pending_highlights %}
+      <section class="mb-6 rounded-lg bg-base-100 p-4 shadow-sm">
+        <div class="mb-3">
+          <h2 class="font-semibold">{% trans "Pending highlights" %}</h2>
+          <p class="text-sm text-base-content/60">{% trans "Waiting for a game" %}</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {% for highlight in pending_highlights %}
+            <figure class="card card-compact bg-base-200/40">
+              <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Game highlight') }}" class="h-36 w-full rounded-md object-cover">
+              {% if highlight.caption or highlight.player %}
+                <figcaption class="p-2 text-xs">
+                  {% if highlight.caption %}<div class="font-medium">{{ highlight.caption }}</div>{% endif %}
+                  {% if highlight.player %}<div class="text-base-content/60">{{ highlight.player.name }}</div>{% endif %}
+                </figcaption>
+              {% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
 
     {% if games %}
       {% for game in games %}

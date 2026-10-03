@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block header-control %}
+  <a href="{% url 'player_profile' player.id %}" class="text-sky-700 hover:underline text-sm font-medium shrink-0">{% trans "← Back to player" %}</a>
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <header class="mb-6 mt-2">
+    <h1 class="text-2xl font-semibold tracking-tight">{% trans "All highlights" %}</h1>
+    <p class="mt-1 text-base-content/70">{{ player.name }}</p>
+  </header>
+
+  {% if page_obj.object_list %}
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      {% for highlight in page_obj %}
+        <div>
+          <label for="all-player-highlight-{{ highlight.id }}" class="cursor-zoom-in">
+            <img src="{{ highlight.photo.url }}" alt="{% trans 'Highlight photo' %}" class="aspect-square w-full rounded-md object-cover">
+          </label>
+          <input type="checkbox" id="all-player-highlight-{{ highlight.id }}" class="modal-toggle">
+          <div class="modal" role="dialog">
+            <div class="modal-box max-w-5xl p-3">
+              <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Highlight photo') }}" class="w-full rounded-md">
+              {% if highlight.caption %}
+                <div class="mt-2 text-sm">{{ highlight.caption }}</div>
+              {% endif %}
+              {% if highlight.player %}
+                <div class="text-xs text-base-content/60">{{ highlight.player.name }}</div>
+              {% endif %}
+            </div>
+            <label class="modal-backdrop" for="all-player-highlight-{{ highlight.id }}"></label>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="mt-6 flex items-center justify-center gap-3" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline btn-sm">{% trans "Previous" %}</a>
+        {% endif %}
+        <span class="text-sm text-base-content/70">{% blocktrans with page_number=page_obj.number page_count=page_obj.paginator.num_pages %}Page {{ page_number }} of {{ page_count }}{% endblocktrans %}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline btn-sm">{% trans "Next" %}</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
+      <p class="text-slate-600">{% trans "No highlights yet." %}</p>
+    </div>
+  {% endif %}
+{% endblock %}

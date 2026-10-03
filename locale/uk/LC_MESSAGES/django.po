@@ -89,6 +89,22 @@ msgstr "Світлини"
 msgid "Add Highlight"
 msgstr "Додати Світлину"
 
+#: templates/home.html
+msgid "Add highlight"
+msgstr "Додати світлину"
+
+#: templates/games/_add_highlight_modal.html
+msgid "Upload highlight"
+msgstr "Завантажити світлину"
+
+#: templates/home.html
+msgid "Pending highlights"
+msgstr "Світлини, не прив’язані до гри"
+
+#: templates/home.html
+msgid "Waiting for a game"
+msgstr "Очікують на гру"
+
 #: templates/games/_highlights_section.html:17
 msgid "Player"
 msgstr "Гравець"
@@ -190,7 +206,44 @@ msgstr "Середній рахунок:"
 msgid "Trends"
 msgstr "Динаміка"
 
-#: templates/games/player_profile.html:54
+#: templates/games/player_profile.html
+msgid "Latest highlights"
+msgstr "Останні світлини"
+
+#: templates/games/player_profile.html templates/games/player_highlights.html
+msgid "All highlights"
+msgstr "Усі світлини"
+
+#: templates/games/player_highlights.html
+msgid "← Back to player"
+msgstr "← Назад до профілю"
+
+#: templates/games/player_highlights.html
+msgid "Pagination"
+msgstr "Пагінація"
+
+#: templates/games/player_highlights.html
+msgid "Previous"
+msgstr "Назад"
+
+#: templates/games/player_highlights.html
+msgid "Next"
+msgstr "Далі"
+
+#: templates/games/player_highlights.html
+#, python-format
+msgid "Page %(page_number)s of %(page_count)s"
+msgstr "Сторінка %(page_number)s з %(page_count)s"
+
+#: templates/games/player_highlights.html
+msgid "No highlights yet."
+msgstr "Світлин поки немає."
+
+#: templates/games/player_profile.html
+msgid "Highlight photo"
+msgstr "Світлина з гри"
+
+#: templates/games/player_profile.html:66
 msgid "Recent Games"
 msgstr "Останні ігри"
 

@@ -1,9 +1,12 @@
+from datetime import timedelta
+from urllib.parse import urlparse, parse_qs
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseBadRequest
 from django.db import transaction
 from django.db.models import Avg, Count, Q
 from django.contrib.auth.decorators import login_required
-from urllib.parse import urlparse, parse_qs
+from django.core.paginator import Paginator
 from birthdays.services import get_today_birthdays
 from .models import GameResult, Player, Game, GameHighlight
 from .services import get_latest_games, get_all_clubs, get_club_id_by_slug
@@ -32,6 +35,8 @@ def _render_home(request, game_form=None, show_game_modal=False):
         "games": games,
         "clubs": clubs,
         "birthdays": get_today_birthdays(),
+        "pending_highlights": GameHighlight.objects.filter(game__isnull=True).select_related("player").order_by("-created_at"),
+        "players": Player.objects.order_by("name"),
         "game_form": game_form or GameCreateForm(),
         "show_game_modal": show_game_modal,
     }
@@ -64,9 +69,20 @@ def player_profile(request, player_id):
     recent_ranks = list(reversed(recent_results))
     return render(request, "games/player_profile.html", {
         "player": player,
+        "latest_highlights": player.highlights.order_by("-created_at")[:4],
         "games": games,
         "stats": stats,
         "recent_ranks": recent_ranks,
+    })
+
+
+def player_highlights(request, player_id):
+    player = get_object_or_404(Player, pk=player_id)
+    highlights = player.highlights.select_related("player").order_by("-created_at")
+    page_obj = Paginator(highlights, 20).get_page(request.GET.get("page"))
+    return render(request, "games/player_highlights.html", {
+        "player": player,
+        "page_obj": page_obj,
     })
 
 
@@ -112,5 +128,9 @@ def create_game(request):
         game = Game.objects.create(is_unranked=form.cleaned_data["is_unranked"])
         for result in form.cleaned_results():
             GameResult.objects.create(game=game, **result)
+        GameHighlight.objects.filter(
+            game__isnull=True,
+            created_at__range=(game.played_at - timedelta(hours=5), game.played_at),
+        ).update(game=game)
 
     return redirect("/")

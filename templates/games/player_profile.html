@@ -50,7 +50,42 @@
         <canvas id="rankTrendChart" class="w-full block"></canvas>
       </div>
     </div>
+  {% endif %}
 
+  {% if latest_highlights %}
+    <section class="mt-8 mb-6">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="font-semibold text-lg">{% trans "Latest highlights" %}</h2>
+        <a href="{% url 'player_highlights' player.id %}" class="inline-flex items-center gap-1 text-sm font-medium text-sky-700 hover:underline">
+          {% trans "All highlights" %}<span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="grid w-full grid-cols-4 gap-2">
+        {% for highlight in latest_highlights %}
+          <div>
+            <label for="player-highlight-{{ highlight.id }}" class="cursor-zoom-in">
+              <img src="{{ highlight.photo.url }}" alt="{% trans 'Highlight photo' %}" class="aspect-square w-full rounded-md object-cover">
+            </label>
+            <input type="checkbox" id="player-highlight-{{ highlight.id }}" class="modal-toggle">
+            <div class="modal" role="dialog">
+              <div class="modal-box max-w-5xl p-3">
+                <img src="{{ highlight.photo.url }}" alt="{{ highlight.caption|default:_('Highlight photo') }}" class="w-full rounded-md">
+                {% if highlight.caption %}
+                  <div class="mt-2 text-sm">{{ highlight.caption }}</div>
+                {% endif %}
+                {% if highlight.player %}
+                  <div class="text-xs text-base-content/60">{{ highlight.player.name }}</div>
+                {% endif %}
+              </div>
+              <label class="modal-backdrop" for="player-highlight-{{ highlight.id }}"></label>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if games %}
     <h2 class="font-semibold text-lg mb-4 mt-8">{% trans "Recent Games" %}</h2>
 
     <!-- Games list -->
@@ -69,6 +104,7 @@
 
 
 {% block extra_scripts %}
+  {% if games %}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
       const ctx = document.getElementById('rankTrendChart');
@@ -111,4 +147,5 @@
       new Chart(ctx, {type: 'line', data, options});
 
   </script>
+  {% endif %}
 {% endblock %}

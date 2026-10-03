@@ -1,0 +1,43 @@
+{% load i18n %}
+
+<dialog id="add-highlight-modal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box max-h-[80dvh] w-full max-w-lg overflow-y-auto">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3" aria-label="{% trans 'Close' %}">✕</button>
+    </form>
+    <h2 class="text-xl font-semibold">{% trans "Upload highlight" %}</h2>
+    <form method="post" action="{% url 'game_highlight_create' %}" enctype="multipart/form-data" class="mt-4 space-y-4">
+      {% csrf_token %}
+      <div class="form-control">
+        <label class="label" for="pending-highlight-player">
+          <span class="label-text">{% trans "Player" %}</span>
+        </label>
+        <select id="pending-highlight-player" name="player_id" class="select select-bordered w-full">
+          <option value="">{% trans "No player" %}</option>
+          {% for player in players %}
+            <option value="{{ player.id }}">{{ player.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-control">
+        <label class="label" for="pending-highlight-photos">
+          <span class="label-text">{% trans "Photos" %}</span>
+        </label>
+        <input id="pending-highlight-photos" type="file" name="photos" accept="image/*" class="file-input file-input-bordered w-full" multiple required>
+      </div>
+      <div class="form-control">
+        <label class="label" for="pending-highlight-caption">
+          <span class="label-text">{% trans "Caption" %}</span>
+        </label>
+        <input id="pending-highlight-caption" type="text" name="caption" class="input input-bordered w-full" maxlength="255">
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('add-highlight-modal').close()">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>{% trans "Close" %}</button>
+  </form>
+</dialog>

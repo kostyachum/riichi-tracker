@@ -67,15 +67,20 @@
         <div class="ml-auto">
             <form action="{% url 'set_language' %}" method="post" class="inline">
                 {% csrf_token %}
-                <select name="language" onchange="this.form.submit()" class="select select-sm select-neutral">
-                    {% get_current_language as LANGUAGE_CODE %}
+                {% get_current_language as LANGUAGE_CODE %}
+                <label class="relative inline-block">
+                <span class="pointer-events-none absolute inset-y-0 left-0 z-10 flex w-12 items-center justify-center md:hidden" aria-hidden="true">
+                    {% if LANGUAGE_CODE == "uk" %}🇺🇦{% else %}🇬🇧{% endif %}
+                </span>
+                <select name="language" aria-label="Language" onchange="this.form.submit()" class="select select-sm select-neutral w-12 text-transparent md:w-auto md:text-current">
                     {% get_available_languages as LANGUAGES %}
                     {% for code, name in LANGUAGES %}
-                    <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
+                    <option value="{{ code }}" class="text-slate-800" {% if code == LANGUAGE_CODE %}selected{% endif %}>
                         {{ name }}
                     </option>
                     {% endfor %}
                 </select>
+                </label>
             </form>
         </div>
         {% endblock %}
@@ -88,7 +93,7 @@
     <div class="mx-auto ">
         {% block footer %}
 
-        <p>© {% now "Y" %} Riichi Mahjong Tracker by <a href="https://thecreditsroll.com/">The Credits Roll</a></p>
+        <p>© {% now "Y" %} Riichi Mahjong Tracker by <a href="https://thecreditsroll.com/" class="underline">The Credits Roll</a></p>
         {% endblock %}
     </div>
 </footer>
